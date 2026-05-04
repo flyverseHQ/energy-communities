@@ -1,8 +1,37 @@
-# Docker setup for DISYS project
-This Docker Compose configuration includes two essential containers for the project's infrastructure. The first container hosts the database, providing persistent storage and efficient management for the project's data. It ensures reliability and scalability, making it suitable for handling the application's data transactions. The second container is configured as a queue, which facilitates asynchronous task processing and communication between various components of the project. This setup improves system performance by decoupling workloads and enhancing the application's ability to handle concurrent operations. Together, these containers provide a robust and scalable foundation for the project's backend systems.
+# Energy Communities
 
-## Database
-The database container in this setup runs a PostgreSQL database configured with a user named **"disysuser"** and a password **"disyspw"**. For the project, you will need to create the necessary databases and tables to store and manage the required data effectively. The connection details are as follows: the hostname is the localhost, the default port is 5432, and you can authenticate using the provided username and password. Ensure that the PostgreSQL container is running before attempting to connect.
+This project implements a distributed system for simulating an energy community, where energy production and consumption are processed and visualized.
 
-## Queue 
-The queue container in this setup runs a RabbitMQ Management instance, which provides both message queuing functionality and a user-friendly web-based management interface. RabbitMQ facilitates the communication between different components of the project by enabling reliable message passing. To connect to the RabbitMQ instance, you can access the management interface via a web browser by navigating to http://loclahost:15672. By default, you can log in using the username "guest" and password "guest", unless overridden in the Docker Compose configuration. For programmatic access, RabbitMQ client libraries can connect using the host at loclahost:5672. Ensure the container is running and accessible before attempting to connect.
+The system follows a modular architecture with a REST API backend, a JavaFX desktop client, and supporting infrastructure using Docker.
+
+## Components
+
+* backend-api: Spring Boot REST API
+* gui: JavaFX client
+* PostgreSQL (Docker)
+* RabbitMQ (Docker)
+
+## Start infrastructure
+
+```bash
+docker compose up -d
+```
+
+## Run backend
+
+```bash
+cd backend-api
+mvn spring-boot:run
+```
+
+## API endpoints
+
+```text
+GET http://localhost:8080/energy/current
+GET http://localhost:8080/energy/historical?start=...&end=...
+```
+
+## Status
+
+* [x] Backend API running
+* [ ] GUI in progress
