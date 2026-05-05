@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/energy")
-@CrossOrigin
+@CrossOrigin // Sehr wichtig: Erlaubt dem Frontend, Daten von diesem Backend abzufragen!
 public class EnergyController {
 
     private final EnergyService energyService;

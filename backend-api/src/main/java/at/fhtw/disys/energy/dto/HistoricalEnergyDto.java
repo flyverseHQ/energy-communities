@@ -5,5 +5,4 @@ public record HistoricalEnergyDto(
         double communityProduced,
         double communityUsed,
         double gridUsed
-) {
-}
+) {}

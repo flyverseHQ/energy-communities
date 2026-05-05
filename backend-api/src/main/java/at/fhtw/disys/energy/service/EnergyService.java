@@ -10,13 +10,18 @@ import java.util.List;
 public class EnergyService {
 
     public CurrentEnergyDto getCurrentEnergy() {
-        return new CurrentEnergyDto(78.54, 7.23);
+        // Hier könnte später die echte Datenbank-Abfrage stehen.
+
+        return new CurrentEnergyDto(65.5, 34.5);
     }
 
     public List<HistoricalEnergyDto> getHistoricalEnergy(String start, String end) {
+        // Hier nutzen wir nun die vom Frontend übergebenen Parameter (start/end),
+        // damit die API dynamisch auf die Kalender-Eingaben reagiert!
         return List.of(
-                new HistoricalEnergyDto("2025-01-10T14:00:00", 143.024, 130.101, 14.75),
-                new HistoricalEnergyDto("2025-01-10T13:00:00", 120.500, 110.300, 10.20)
+                new HistoricalEnergyDto(start + "T08:00:00", 150.0, 140.0, 10.0),
+                new HistoricalEnergyDto(start + "T12:00:00", 180.5, 170.0, 2.5),
+                new HistoricalEnergyDto(end + "T18:00:00", 120.0, 110.0, 25.0)
         );
     }
 }
