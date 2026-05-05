@@ -2,6 +2,7 @@ package at.fhtw.disys.energy.service;
 
 import at.fhtw.disys.energy.dto.CurrentEnergyDto;
 import at.fhtw.disys.energy.dto.HistoricalEnergyDto;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,19 +10,46 @@ import java.util.List;
 @Service
 public class EnergyService {
 
-    public CurrentEnergyDto getCurrentEnergy() {
-        // Hier könnte später die echte Datenbank-Abfrage stehen.
+    private final JdbcTemplate jdbcTemplate;
 
-        return new CurrentEnergyDto(65.5, 34.5);
+    public EnergyService(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public CurrentEnergyDto getCurrentEnergy() {
+        String sql = """
+                SELECT community_depleted, grid_portion
+                FROM energy_usage
+                ORDER BY hour DESC
+                LIMIT 1
+                """;
+
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) ->
+                new CurrentEnergyDto(
+                        rs.getDouble("community_depleted"),
+                        rs.getDouble("grid_portion")
+                )
+        );
     }
 
     public List<HistoricalEnergyDto> getHistoricalEnergy(String start, String end) {
-        // Hier nutzen wir nun die vom Frontend übergebenen Parameter (start/end),
-        // damit die API dynamisch auf die Kalender-Eingaben reagiert!
-        return List.of(
-                new HistoricalEnergyDto(start + "T08:00:00", 150.0, 140.0, 10.0),
-                new HistoricalEnergyDto(start + "T12:00:00", 180.5, 170.0, 2.5),
-                new HistoricalEnergyDto(end + "T18:00:00", 120.0, 110.0, 25.0)
+        String sql = """
+                SELECT hour, community_produced, community_used, grid_used
+                FROM energy_usage
+                WHERE hour BETWEEN ?::timestamp AND ?::timestamp
+                ORDER BY hour DESC
+                """;
+
+        return jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> new HistoricalEnergyDto(
+                        rs.getTimestamp("hour").toLocalDateTime().toString(),
+                        rs.getDouble("community_produced"),
+                        rs.getDouble("community_used"),
+                        rs.getDouble("grid_used")
+                ),
+                start,
+                end
         );
     }
 }
