@@ -6,7 +6,9 @@ services:
     environment:
       - POSTGRES_USER=disysuser
       - POSTGRES_PASSWORD=disyspw
-  
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
   rabbitmq:
     image: rabbitmq:management-alpine
     ports:
