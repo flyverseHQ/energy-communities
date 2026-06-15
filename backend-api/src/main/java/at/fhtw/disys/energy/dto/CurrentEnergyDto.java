@@ -1,6 +1,11 @@
 package at.fhtw.disys.energy.dto;
 
 public record CurrentEnergyDto(
-        double communityPoolUsedPercent,
-        double gridPortionPercent
-) {}
+        String hour,
+        double communityProduced,
+        double communityUsed,
+        double gridUsed,
+        double communityDepleted,
+        double gridPortion
+) {
+}
