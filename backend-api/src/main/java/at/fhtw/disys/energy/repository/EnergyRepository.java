@@ -6,11 +6,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class EnergyRepository {
+
+    private static final DateTimeFormatter DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -48,7 +52,7 @@ public class EnergyRepository {
         List<CurrentEnergyDto> result = jdbcTemplate.query(
                 sql,
                 (rs, rowNum) -> new CurrentEnergyDto(
-                        rs.getTimestamp("hour").toLocalDateTime().toString(),
+                        formatHour(rs.getTimestamp("hour").toLocalDateTime()),
                         rs.getDouble("community_produced"),
                         rs.getDouble("community_used"),
                         rs.getDouble("grid_used"),
@@ -75,7 +79,7 @@ public class EnergyRepository {
         return jdbcTemplate.query(
                 sql,
                 (rs, rowNum) -> new HistoricalEnergyDto(
-                        rs.getTimestamp("hour").toLocalDateTime().toString(),
+                        formatHour(rs.getTimestamp("hour").toLocalDateTime()),
                         rs.getDouble("community_produced"),
                         rs.getDouble("community_used"),
                         rs.getDouble("grid_used")
@@ -83,5 +87,9 @@ public class EnergyRepository {
                 start,
                 end
         );
+    }
+
+    private String formatHour(LocalDateTime hour) {
+        return hour.format(DATE_TIME_FORMATTER);
     }
 }
