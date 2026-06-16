@@ -14,14 +14,17 @@ import java.util.Random;
 public class EnergyProducerService implements ApplicationRunner {
 
     private final RabbitTemplate rabbitTemplate;
+    private final WeatherService weatherService;
     private final String queueName;
     private final Random random = new Random();
 
     public EnergyProducerService(
             RabbitTemplate rabbitTemplate,
+            WeatherService weatherService,
             @Value("${energy.queue.name}") String queueName
     ) {
         this.rabbitTemplate = rabbitTemplate;
+        this.weatherService = weatherService;
         this.queueName = queueName;
     }
 
@@ -59,7 +62,7 @@ public class EnergyProducerService implements ApplicationRunner {
         int hour = now.getHour();
 
         double daylightFactor = calculateDaylightFactor(hour);
-        double weatherFactor = calculateWeatherFactor();
+        double weatherFactor = weatherService.getSolarWeatherFactor();
 
         double maxProductionPerMinute = 0.08;
         double produced = maxProductionPerMinute * daylightFactor * weatherFactor;
@@ -81,9 +84,5 @@ public class EnergyProducerService implements ApplicationRunner {
         }
 
         return 0.3;
-    }
-
-    private double calculateWeatherFactor() {
-        return 0.3 + (random.nextDouble() * 0.7);
     }
 }
