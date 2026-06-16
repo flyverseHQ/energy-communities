@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -69,6 +70,20 @@ public class DashboardController {
         producedColumn.setCellValueFactory(new PropertyValueFactory<>("communityProduced"));
         usedColumn.setCellValueFactory(new PropertyValueFactory<>("communityUsed"));
         gridUsedColumn.setCellValueFactory(new PropertyValueFactory<>("gridUsed"));
+
+        producedColumn.setCellFactory(column -> createFormattedDoubleCell());
+        usedColumn.setCellFactory(column -> createFormattedDoubleCell());
+        gridUsedColumn.setCellFactory(column -> createFormattedDoubleCell());
+    }
+
+    private TableCell<HistoricalEnergyRow, Double> createFormattedDoubleCell() {
+        return new TableCell<>() {
+            @Override
+            protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                setText(empty || value == null ? null : String.format("%.3f", value));
+            }
+        };
     }
 
     @FXML

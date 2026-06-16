@@ -37,6 +37,7 @@ public class EnergyUserService implements ApplicationRunner {
 
     private void sendUsageMessage() {
         double kwh = calculateUsedKwh();
+        String timeOfDayPeriod = determineTimeOfDayPeriod(LocalDateTime.now().getHour());
 
         EnergyMessage message = new EnergyMessage(
                 "USER",
@@ -48,9 +49,10 @@ public class EnergyUserService implements ApplicationRunner {
         rabbitTemplate.convertAndSend(queueName, message);
 
         System.out.printf(
-                "Sent USER message: %.4f kWh at %s%n",
+                "Sent USER message: %.4f kWh at %s (%s consumption period)%n",
                 message.getKwh(),
-                message.getDatetime()
+                message.getDatetime(),
+                timeOfDayPeriod
         );
     }
 
@@ -81,5 +83,21 @@ public class EnergyUserService implements ApplicationRunner {
         }
 
         return 1.0;
+    }
+
+    private String determineTimeOfDayPeriod(int hour) {
+        if (hour >= 6 && hour <= 9) {
+            return "morning peak";
+        }
+
+        if (hour >= 17 && hour <= 22) {
+            return "evening peak";
+        }
+
+        if (hour >= 0 && hour <= 5) {
+            return "night low";
+        }
+
+        return "normal";
     }
 }

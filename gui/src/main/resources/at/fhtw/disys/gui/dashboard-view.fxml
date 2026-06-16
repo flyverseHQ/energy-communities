@@ -32,7 +32,7 @@
 
         <HBox spacing="80" alignment="CENTER_LEFT">
             <VBox spacing="8">
-                <Label text="Community Usage" styleClass="metric-label"/>
+                <Label text="Community Pool Usage" styleClass="metric-label"/>
                 <Label fx:id="communityUsageValue" text="0.00%" styleClass="metric-value-green"/>
             </VBox>
 
@@ -66,27 +66,30 @@
 
         <HBox spacing="50" alignment="CENTER">
             <VBox spacing="8" alignment="CENTER">
-                <Label text="Produced"/>
+                <Label text="Community Produced"/>
                 <Label fx:id="producedValue" text="--- kWh" styleClass="metric-value-green-small"/>
             </VBox>
 
             <VBox spacing="8" alignment="CENTER">
-                <Label text="Used"/>
+                <Label text="Community Used"/>
                 <Label fx:id="usedValue" text="--- kWh" styleClass="metric-value-blue-small"/>
             </VBox>
 
             <VBox spacing="8" alignment="CENTER">
-                <Label text="Grid Usage"/>
+                <Label text="Grid Used"/>
                 <Label fx:id="gridUsedValue" text="--- kWh" styleClass="metric-value-red-small"/>
             </VBox>
         </HBox>
 
-        <TableView fx:id="historicalTable" prefHeight="180">
+        <TableView fx:id="historicalTable" prefHeight="220">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
             <columns>
-                <TableColumn fx:id="hourColumn" text="Hour" prefWidth="180"/>
-                <TableColumn fx:id="producedColumn" text="Produced kWh" prefWidth="150"/>
-                <TableColumn fx:id="usedColumn" text="Used kWh" prefWidth="150"/>
-                <TableColumn fx:id="gridUsedColumn" text="Grid kWh" prefWidth="150"/>
+                <TableColumn fx:id="hourColumn" text="Hour" prefWidth="220"/>
+                <TableColumn fx:id="producedColumn" text="Produced kWh" prefWidth="180"/>
+                <TableColumn fx:id="usedColumn" text="Used kWh" prefWidth="180"/>
+                <TableColumn fx:id="gridUsedColumn" text="Grid kWh" prefWidth="180"/>
             </columns>
         </TableView>
     </VBox>
