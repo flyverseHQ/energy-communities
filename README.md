@@ -164,7 +164,7 @@ GET /energy/historical?start=2025-01-10T00:00:00&end=2025-01-10T23:59:59
   "communityProduced": 143.024,
   "communityUsed": 130.101,
   "gridUsed": 14.75,
-  "communityDepleted": 90.97,
+  "communityDepleted": 90.96,
   "gridPortion": 10.18
 }
 ```
@@ -247,6 +247,8 @@ Grid Portion: 100.00%
 This is expected behavior.
 
 ## Start Order
+
+Open a separate terminal for each application and run the command from the project root or from the corresponding module directory.
 
 Recommended start order:
 
